@@ -37,5 +37,4 @@ Instead of relying on computationally expensive two-phase simulations, we comput
 | `PhaseDiagram-train.py` | Constructs phase diagrams for all three training systems extracted from MD biphasic simulations. Final plots shown in SI Figure S2 |
 | `PhaseDiagram-test.py` | Compares ML-predicted phase diagrams against MD for test systems. See main text Figure 4 |
 | `GP.py` | Main script for training and evaluating the Gaussian Process model. See Figures 2 and 3. |
-| `kbi_data.csv` | Tabulated KBIs \( G_{11}, G_{12}, G_{22} \) used as input features for GP |
-| `activity_coeffs.csv` | MD-derived activity coefficients \( \gamma_1, \gamma_2 \) used as GP targets |
+| `phase-digram.csv` | Tabulated KBIs \( G_{11}, G_{12}, G_{22} \) activity coefficients for training and test systems, predicted activity coefficients for test systems, and the corresponding reconstructed phase diagrams. |
