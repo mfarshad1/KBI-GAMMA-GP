@@ -24,6 +24,12 @@ Instead of relying on computationally expensive two-phase simulations, we comput
 | File | Description |
 |------|-------------|
 | `data.sh` | Example script to generate LAMMPS input configurations for binary LJ systems |
+| `md.in` | LAMMPS input file for binary Lennard-Jones mixture simulations.
+| `md-pure1.in` | LAMMPS input file for pure component 1 simulations.
+| `md-pure2.in` | LAMMPS input file for pure component 2 simulations.
+| `batch` | Slurm batch script to run MD simulations for binary Lennard-Jones mixtures.
+| `batch-pure1` | Slurm batch script to run MD simulations for pure component 1.
+| `batch-pure2` | Slurm batch script to run MD simulations for pure component 2.
 | `KBI.py` | Computes RDF, KBIs, corrected KBIs for a given system from MD trajectories. See SI Figures S3–S12 for system-specific results |
 | `KBI-all.py` | Computes corrected Kirkwood–Buff integrals for all system. See Figure 1.  |
 | `PhaseDiagram.py` | Constructs VLE phase diagrams from MD pressure and density profiles. Outputs shown in SI Figure S1 |
