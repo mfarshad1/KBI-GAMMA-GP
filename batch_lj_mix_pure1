@@ -1,0 +1,20 @@
+#!/bin/bash
+#$ -M mfarshad@nd.edu   # Email address for job notification
+#$ -m abe               # Send mail when job begins, ends and aborts
+#$ -N LJ-md
+#$ -q long             # Specify queue
+#$ -pe smp 2
+# #$ -pe mpi-24 48        # Specify parallel environment and legal core size
+
+#cd $PBS_O_WORKDIR
+
+module load lammps
+nproc=64
+
+for i in {1..1..1}
+do
+        #temp=$(sed "${i}q;d" "temp")
+        #sed "s/TTT/${temp}/g" lmp_md_init_tmp.in > "lmp_md_init_T${temp}.in"
+        mpirun -np $NSLOTS lmp_mpi < "../md_pure1.in" > "md.out"
+done
+

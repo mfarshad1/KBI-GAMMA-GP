@@ -1,0 +1,98 @@
+# Si_md_nvt.in
+
+# variables
+variable	dt equal 0.001 # timestep
+#variable	T equal TTT # temperature
+variable        T equal 0.77 # temperature
+variable	TEMP format T %.2f
+variable        NEVERY equal 1000 
+variable        NREPEAT equal 10
+variable        NFREQ equal 10000
+
+# general parameters
+dimension	3
+units		lj
+boundary	p p p
+timestep	${dt} # ps
+atom_style	atomic
+
+# pair interactions
+pair_style      lj/cut 2.5
+pair_modify     shift yes
+
+# read
+read_data	system.data
+group           1 type 1
+#group           2 type 2
+
+mass            1 1
+#mass            2 1
+
+# interaction coefficients
+pair_coeff	1 1 1.0 1.0
+#pair_coeff	2 2 0.9 1.0
+#pair_coeff	1 2 0.94868329805 1.0
+
+# init
+velocity	all create $T 1 mom yes rot yes dist gaussian
+
+# neighbor
+neigh_modify	every 1 delay 0 check yes # neighbor list
+
+# fixes
+#fix		Ensemble all nvt temp $T $T $(100.0*dt)
+fix   Ensemble all npt temp $T $T $(100.0*dt) iso 1.0 1.0 1000.0 drag 1.0
+
+# thermo output
+thermo		1000
+thermo_style	custom step enthalpy etotal temp press vol
+
+# minimization 
+minimize        1e-6 1e-4 10000 1000000
+
+dump            DUMP all custom 10000 eq_T${TEMP}.dump id type x y z
+
+run             4000000
+
+# set number of bins
+variable        nbins index 1200
+variable        fraction equal 1.0/v_nbins
+
+# define bins as chunks
+compute         cchunk all chunk/atom bin/1d z lower ${fraction} units reduced
+compute         stress all stress/atom NULL
+
+# apply conversion to pressure early since we have no variable style for processing chunks
+variable        press atom -(c_stress[1]+c_stress[2]+c_stress[3])/(3.0*vol*${fraction})
+variable        pxx atom -(c_stress[1])/(1.0*vol*${fraction})
+variable        pyy atom -(c_stress[2])/(1.0*vol*${fraction})
+variable        pzz atom -(c_stress[3])/(1.0*vol*${fraction})
+
+compute         binpress all reduce/chunk cchunk sum v_press
+compute         binpxx all reduce/chunk cchunk sum v_pxx
+compute         binpyy all reduce/chunk cchunk sum v_pyy
+compute         binpzz all reduce/chunk cchunk sum v_pzz
+
+fix             avg_press all ave/time ${NEVERY} ${NREPEAT} ${NFREQ} c_binpress mode vector file ave_press.txt
+fix             avg_xx all ave/time ${NEVERY} ${NREPEAT} ${NFREQ} c_binpxx mode vector file pxx.txt
+fix             avg_yy all ave/time ${NEVERY} ${NREPEAT} ${NFREQ} c_binpyy mode vector file pyy.txt
+fix             avg_zz all ave/time ${NEVERY} ${NREPEAT} ${NFREQ} c_binpzz mode vector file pzz.txt
+
+# Compute number density per chunk
+#fix             rho_all all ave/chunk ${NEVERY} ${NREPEAT} ${NFREQ} cchunk density/number file density.T-$T.data
+fix             rho_1 1 ave/chunk ${NEVERY} ${NREPEAT} ${NFREQ} cchunk density/number file density_1.T-$T.data
+#fix             rho_2 2 ave/chunk ${NEVERY} ${NREPEAT} ${NFREQ} cchunk density/number file density_2.T-$T.data
+
+# Compute RDF
+comm_modify     cutoff 6.0
+
+compute         binrdf all rdf ${nbins} 1 1 cutoff 5.0
+fix             rdf all ave/time ${NEVERY} ${NREPEAT} ${NFREQ} c_binrdf[*] file rdf.data mode vector
+
+thermo_style    custom step temp pzz
+
+# data output
+dump		PROD all custom 10000 md_T${TEMP}.dump id type x y z
+
+# run instruction
+run		4000000
