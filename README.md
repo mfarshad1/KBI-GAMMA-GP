@@ -18,10 +18,12 @@ Instead of expensive two-phase simulations, we compute KBIs from single-phase si
 
 ## 📁 Files
 
-| Ptyhon example codes |
+| example codes |
 |------|-------------|
+| `data.sh` | Example of input data generation for MD simulation in LAMMPS |
 | `KBI.py` | Reads RDFs and computes corrected KBIs |
-| `PhaseDiagram.py` | MD construction of VLE phase diagrams using pressure and density profiles from MD trajectories |
+| `PhaseDiagram.py` | MD construction of VLE phase diagrams using pressure and density profiles from MD trajectories with four subplots of densities, pressure, and resulting pphase diagram shown in SI, Figures S1 |
+| `PhaseDiagram-train.py` | MD construction of VLE phase diagrams using pressure and density profiles from MD trajectories with four subplots of densities, pressure, and resulting pphase diagram shown in SI, Figures S1 |
 | `GP.py` | GP model |
 | `kbi_data.csv` | Tabulated \( G_{ij} \) values used as GP input |
 | `activity_coeffs.csv` | MD-extracted \( \gamma_1, \gamma_2 \) values for GP output |
