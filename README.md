@@ -36,5 +36,5 @@ Instead of relying on computationally expensive two-phase simulations, we comput
 | `PhaseDiagram.py` | Constructs VLE phase diagrams from MD pressure and density profiles extracted from MD biphasic simulations. Outputs shown in SI Figure S1 |
 | `PhaseDiagram-train.py` | Constructs phase diagrams for all three training systems extracted from MD biphasic simulations. Final plots shown in SI Figure S2 |
 | `PhaseDiagram-test.py` | Compares ML-predicted phase diagrams against MD for test systems. See main text Figure 4 |
-| `GP.py` | Main script for training and evaluating the Gaussian Process model. See Figures 2 and 3. |
+| `GP.py` | Main script for training and evaluating the Gaussian Process model. See Figures 2 and 3 and SI Figures 13 and 14. |
 | `PhaseDiagram.xlsx` | An Excel file that contains tabulated KBIs (SI, Tables S2-S6), activity coefficients for training (Table S1) and test systems (Table S7), predicted activity coefficients for test systems (Table S7), and the corresponding reconstructed phase diagrams. |
